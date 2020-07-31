@@ -80,6 +80,9 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
   void dispose() {
     _toastWindow.dispose();
     _loadingWindow.dispose();
+    if(_anchorBottomWindow != null){
+      _anchorBottomWindow.dispose();
+    }
     controller.dispose();
     super.dispose();
   }
