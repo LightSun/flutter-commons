@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'sample/base_window_demos.dart';
+import 'base_window_demos.dart';
+
 
 void main() {
   runApp(MyApp());

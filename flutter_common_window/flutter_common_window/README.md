@@ -3,7 +3,7 @@
 a common overlap window for flutter. support animation, anchor left/right/top/bottom.
 
 ## Getting Started
-### simple progress-dialog
+## simple progress-dialog
 * 1, create window.
 ```dart
 _loadingWindow = new Window((BuildContext context){
@@ -38,7 +38,7 @@ _loadingWindow.toggleShow(context);
  _loadingWindow.dispose();
 ```
 
-### simple toast with animation
+## simple toast with animation
 * 1, setup.
 ``` dart
   AnimationController controller;
@@ -99,7 +99,7 @@ _loadingWindow.toggleShow(context);
 ```dart
 _toastWindow.toggleShow(context, showTimeMsec: 2000);
 ```
-### anchor window
+## anchor window
 * 1, create correct widget.
 ```dart
 ...
@@ -132,6 +132,6 @@ void _showBottomWindow(){
 ```
 *3, dismiss and dispose same as above.
 
-### The more to see . in 'lib/sample/base_window_demos.dart'
+### The more to see . in 'example/base_window_demos.dart'
 ## Anchor
 * Heaven7<donshine723@gmail.com>
