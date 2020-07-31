@@ -1,6 +1,5 @@
 # flutter_common_window
 [![pub package](https://img.shields.io/pub/v/flutter_common_window.svg)](https://pub.dev/packages/flutter_common_window)
-[![Build Status](https://travis-ci.org/dart-lang/flutter_common_window.svg?branch=master)](https://travis-ci.org/dart-lang/flutter_common_window)
 a common overlap window for flutter. support animation, anchor left/right/top/bottom.
 
 ## demo
@@ -134,6 +133,6 @@ void _showBottomWindow(){
 ```
 *3, dismiss and dispose same as above.
 
-### The more to see . in 'example/base_window_demos.dart'
+### The more to see . in 'example/main.dart'
 ## Anchor
 * Heaven7
