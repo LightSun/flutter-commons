@@ -1,16 +1,137 @@
 # flutter_common_window
 
-A new Flutter application.
+a common overlap window for flutter. support animation, anchor left/right/top/bottom.
 
 ## Getting Started
+### simple progress-dialog
+* 1, create window.
+```dart
+_loadingWindow = new Window((BuildContext context){
+      return BaseWindow.of(context, _buildLoadingWidget(context),
+          top: MediaQuery.of(context).size.height * 2 / 5);
+    });
+Widget _buildLoadingWidget(BuildContext context) {
+       return Center(
+         child: Column(
+           children: <Widget>[
+             CircularProgressIndicator()
+           ],
+         ),
+       );
+    }
+```
+* 2, show
+```dart
+ _loadingWindow.show(context);
+```
+* 3,dismiss
+```dart
+ _loadingWindow.dismiss();
+```
+* 4, toggle show.
+```dart
+//if it is shown -> dismiss. if it is not shown ->show
+_loadingWindow.toggleShow(context);
+```
+* 5, dispose
+```dart
+ _loadingWindow.dispose();
+```
 
-This project is a starting point for a Flutter application.
+### simple toast with animation
+* 1, setup.
+``` dart
+  AnimationController controller;
+  Animation<Offset> animation;
+  Window _toastWindow;
 
-A few resources to get you started if this is your first Flutter project:
+  void initState() {
+     super.initState();
+      controller = new AnimationController(
+             vsync: this, duration: const Duration(seconds: 2));
+      animation = Tween(begin: Offset.zero, end: Offset(0.0, 10)).animate(controller);
+     _toastWindow = new Window((BuildContext context){
+       return BaseWindow.of(context, _buildToastWidget(context),
+           top: _toastTop,showCallback: (bool){
+               if(bool){
+                 return controller.forward(from: 0.0);
+               }
+               return Future.value();
+           }, dismissDelegate: () =>
+              controller.reverse());
+     });
+ }
+  @override
+   void dispose() {
+     _toastWindow.dispose();
+     controller.dispose();
+     super.dispose();
+   }
+   Widget _buildToastWidget(BuildContext context) {
+       return SlideTransition(
+           position: animation,
+           child: Padding(
+             padding: EdgeInsets.symmetric(horizontal: 40.0),
+             child: _buildToastImpl(context),
+           )
+       );
+     }
+     Widget _buildToastImpl(BuildContext context,{text}) {
+       text ??="test show toast by BaseWindow";
+       return Center(
+         child: Card(
+           color: Colors.black,
+           child: Padding(
+             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+             child: Text(
+               text,
+               style: TextStyle(
+                 fontSize: 14,
+                 color: Colors.white,
+               ),
+             ),
+           ),
+         ),
+       );
+     }
+```
+* 2, show toast with extra duration 2000(exclude animate time).
+```dart
+_toastWindow.toggleShow(context, showTimeMsec: 2000);
+```
+### anchor window
+* 1, create correct widget.
+```dart
+...
+Window _anchorBottomWindow;
+GlobalKey _anchorKey = GlobalKey();
+...
+ Widget build(BuildContext context) {
+ ......
+ Container(
+                color: Colors.yellowAccent,
+                margin: EdgeInsets.fromLTRB(20, 0, 50, 0),
+                child: ListTile(
+                    key: _anchorKey,
+                    title: Text("Anchor window-bottom"),
+                    onTap: () {
+                      _showBottomWindow();
+                    })
+            ),
+   ......
+ }
+```
+* 2, show
+```dart
+void _showBottomWindow(){
+    if(_anchorBottomWindow == null){
+      _anchorBottomWindow = Window.ofAnchor(context, _anchorKey, _buildToastImpl(context));
+    }
+    _anchorBottomWindow.toggleShow(context);
+}
+```
+*3, dismiss and dispose same as above.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### The more to see . in 'lib/sample/base_window_demos.dart'
+## Anchor
+* Heaven7<donshine723@gmail.com>

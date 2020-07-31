@@ -75,7 +75,6 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
     controller = new AnimationController(
         vsync: this, duration: const Duration(seconds: 2));
     animation = Tween(begin: Offset.zero, end: Offset(0.0, 10)).animate(controller);
-//    controller.forward();//放在这里开启动画 ，打开页面就播放动画
   }
   @override
   void dispose() {
