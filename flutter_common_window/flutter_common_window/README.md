@@ -134,4 +134,4 @@ void _showBottomWindow(){
 
 ### The more to see . in 'example/base_window_demos.dart'
 ## Anchor
-* Heaven7<donshine723@gmail.com>
+* Heaven7
