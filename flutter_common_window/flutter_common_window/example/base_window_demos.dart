@@ -24,21 +24,22 @@ class BaseWindowDemoApps extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: HomeDemo()
-    );
+        home: HomeDemo());
   }
 }
+
 class HomeDemo extends StatefulWidget {
   @override
   State createState() {
-     return _HomeState();
+    return _HomeState();
   }
 }
-class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
 
-  AnimationController controller;//动画控制器
+class _HomeState extends State<HomeDemo> with TickerProviderStateMixin {
+  AnimationController controller; //动画控制器
   Animation<Offset> animation;
- // CurvedAnimation curved;//曲线动画，动画插值，
+
+  // CurvedAnimation curved;//曲线动画，动画插值，
   double _toastTop = 0;
 
   Window _toastWindow;
@@ -57,35 +58,39 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
   @override
   void initState() {
     super.initState();
-    _toastWindow = new Window((BuildContext context){
+    _toastWindow = new Window((BuildContext context) {
       return BaseWindow.of(context, _buildToastWidget(context),
-          top: _toastTop,showCallback: (bool){
-              if(bool){
-                return controller.forward(from: 0.0);
-              }
-              return Future.value();
-          }, dismissDelegate: () =>
-             controller.reverse());
+          top: _toastTop,
+          showCallback: (bool) {
+            if (bool) {
+              return controller.forward(from: 0.0);
+            }
+            return Future.value();
+          },
+          dismissDelegate: () => controller.reverse());
     });
-    _loadingWindow = new Window((BuildContext context){
+    _loadingWindow = new Window((BuildContext context) {
       return BaseWindow.of(context, _buildLoadingWidget(context),
           top: _buildToastPosition(context, Position.center));
     });
     //anim of toast
     controller = new AnimationController(
         vsync: this, duration: const Duration(seconds: 2));
-    animation = Tween(begin: Offset.zero, end: Offset(0.0, 10)).animate(controller);
+    animation =
+        Tween(begin: Offset.zero, end: Offset(0.0, 10)).animate(controller);
   }
+
   @override
   void dispose() {
     _toastWindow.dispose();
     _loadingWindow.dispose();
-    if(_anchorBottomWindow != null){
+    if (_anchorBottomWindow != null) {
       _anchorBottomWindow.dispose();
     }
     controller.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,10 +101,8 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
         centerTitle: true,
         leading: IconButton(
           //icon: Image.asset("aasets/images/arrow_right.png"),
-          icon:  Icon(Icons.add_box),
-          onPressed: (){
-
-          },
+          icon: Icon(Icons.add_box),
+          onPressed: () {},
         ),
       ),
       body: Center(
@@ -108,11 +111,13 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
         widthFactor: 10,
         child: ListView(
           children: <Widget>[
-            ListTile(title: Text("Toast"),
-              onTap: () {
-                _toastWindow.toggleShow(context, showTimeMsec: 2000);
-              }),
-            ListTile(title: Text("LoadingDialog"),
+            ListTile(
+                title: Text("Toast"),
+                onTap: () {
+                  _toastWindow.toggleShow(context, showTimeMsec: 2000);
+                }),
+            ListTile(
+                title: Text("LoadingDialog"),
                 onTap: () {
                   _loadingWindow.toggleShow(context);
                 }),
@@ -123,14 +128,13 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
                     key: _anchorKey8,
                     title: Text("Anchor window-right"),
                     onTap: () {
-                      if(_anchorBottomWindow == null){
-                        _anchorBottomWindow = Window.ofAnchor(context, _anchorKey8,
-                            _buildToastImpl(context, text: "Text")
-                            , showPos: RelativePosition.RIGHT);
+                      if (_anchorBottomWindow == null) {
+                        _anchorBottomWindow = Window.ofAnchor(context,
+                            _anchorKey8, _buildToastImpl(context, text: "Text"),
+                            showPos: RelativePosition.RIGHT);
                       }
                       _anchorBottomWindow.toggleShow(context);
-                    })
-            ),
+                    })),
             Container(
                 color: Colors.blue,
                 margin: EdgeInsets.fromLTRB(100, 0, 100, 0),
@@ -138,14 +142,13 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
                     key: _anchorKey6,
                     title: Text("Anchor window-left"),
                     onTap: () {
-                      if(_anchorBottomWindow == null){
-                        _anchorBottomWindow = Window.ofAnchor(context, _anchorKey6,
-                            _buildToastImpl(context, text: "Text")
-                            , showPos: RelativePosition.LEFT);
+                      if (_anchorBottomWindow == null) {
+                        _anchorBottomWindow = Window.ofAnchor(context,
+                            _anchorKey6, _buildToastImpl(context, text: "Text"),
+                            showPos: RelativePosition.LEFT);
                       }
                       _anchorBottomWindow.toggleShow(context);
-                    })
-            ),
+                    })),
             Container(
                 color: Colors.yellowAccent,
                 margin: EdgeInsets.fromLTRB(20, 0, 50, 0),
@@ -153,12 +156,12 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
                     key: _anchorKey,
                     title: Text("Anchor window-bottom"),
                     onTap: () {
-                      if(_anchorBottomWindow == null){
-                        _anchorBottomWindow = Window.ofAnchor(context, _anchorKey, _buildToastImpl(context));
+                      if (_anchorBottomWindow == null) {
+                        _anchorBottomWindow = Window.ofAnchor(
+                            context, _anchorKey, _buildToastImpl(context));
                       }
                       _anchorBottomWindow.toggleShow(context);
-                    })
-            ),
+                    })),
             Container(
                 color: Colors.yellowAccent,
                 margin: EdgeInsets.fromLTRB(50, 0, 20, 0),
@@ -166,12 +169,12 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
                     key: _anchorKey2,
                     title: Text("Anchor window-bottom2"),
                     onTap: () {
-                      if(_anchorBottomWindow == null){
-                        _anchorBottomWindow = Window.ofAnchor(context, _anchorKey2, _buildToastImpl(context));
+                      if (_anchorBottomWindow == null) {
+                        _anchorBottomWindow = Window.ofAnchor(
+                            context, _anchorKey2, _buildToastImpl(context));
                       }
                       _anchorBottomWindow.toggleShow(context);
-                    })
-            ),
+                    })),
             Container(
                 color: Colors.pinkAccent,
                 margin: EdgeInsets.fromLTRB(50, 0, 20, 0),
@@ -179,13 +182,13 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
                     key: _anchorKey3,
                     title: Text("Anchor window-top"),
                     onTap: () {
-                      if(_anchorBottomWindow == null){
-                        _anchorBottomWindow = Window.ofAnchor(context, _anchorKey3, _buildToastImpl(context)
-                              , showPos: RelativePosition.TOP);
+                      if (_anchorBottomWindow == null) {
+                        _anchorBottomWindow = Window.ofAnchor(
+                            context, _anchorKey3, _buildToastImpl(context),
+                            showPos: RelativePosition.TOP);
                       }
                       _anchorBottomWindow.toggleShow(context);
-                    })
-            ),
+                    })),
             Container(
                 color: Colors.pinkAccent,
                 margin: EdgeInsets.fromLTRB(20, 0, 50, 0),
@@ -193,13 +196,13 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
                     key: _anchorKey4,
                     title: Text("Anchor window-top"),
                     onTap: () {
-                      if(_anchorBottomWindow == null){
-                        _anchorBottomWindow = Window.ofAnchor(context, _anchorKey4, _buildToastImpl(context)
-                            , showPos: RelativePosition.TOP);
+                      if (_anchorBottomWindow == null) {
+                        _anchorBottomWindow = Window.ofAnchor(
+                            context, _anchorKey4, _buildToastImpl(context),
+                            showPos: RelativePosition.TOP);
                       }
                       _anchorBottomWindow.toggleShow(context);
-                    })
-            ),
+                    })),
             Container(
                 color: Colors.blue,
                 margin: EdgeInsets.fromLTRB(100, 0, 100, 0),
@@ -207,14 +210,13 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
                     key: _anchorKey5,
                     title: Text("Anchor window-left"),
                     onTap: () {
-                      if(_anchorBottomWindow == null){
-                        _anchorBottomWindow = Window.ofAnchor(context, _anchorKey5,
-                            _buildToastImpl(context, text: "Text")
-                            , showPos: RelativePosition.LEFT);
+                      if (_anchorBottomWindow == null) {
+                        _anchorBottomWindow = Window.ofAnchor(context,
+                            _anchorKey5, _buildToastImpl(context, text: "Text"),
+                            showPos: RelativePosition.LEFT);
                       }
                       _anchorBottomWindow.toggleShow(context);
-                    })
-            ),
+                    })),
             Container(
                 color: Colors.deepOrangeAccent,
                 margin: EdgeInsets.fromLTRB(100, 0, 100, 0),
@@ -222,18 +224,18 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
                     key: _anchorKey7,
                     title: Text("Anchor window-right"),
                     onTap: () {
-                      if(_anchorBottomWindow == null){
-                        _anchorBottomWindow = Window.ofAnchor(context, _anchorKey7,
-                            _buildToastImpl(context, text: "Text")
-                            , showPos: RelativePosition.RIGHT);
+                      if (_anchorBottomWindow == null) {
+                        _anchorBottomWindow = Window.ofAnchor(context,
+                            _anchorKey7, _buildToastImpl(context, text: "Text"),
+                            showPos: RelativePosition.RIGHT);
                       }
                       _anchorBottomWindow.toggleShow(context);
-                    })
-            ),
+                    })),
             Container(
               color: Colors.purple,
               padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
-              child:  ListTile(title: Text("Dispose all window"),
+              child: ListTile(
+                  title: Text("Dispose all window"),
                   onTap: () {
                     _disposeAllWindow();
                   }),
@@ -242,25 +244,24 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-
-        },
+        onPressed: () {},
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-  void _disposeAllWindow(){
-     if(_anchorBottomWindow != null){
-       _anchorBottomWindow.dispose();
-       _anchorBottomWindow = null;
-     }
-     if(_toastWindow != null){
-       _toastWindow.dismiss();
-     }
-     if(_loadingWindow != null){
-       _loadingWindow.dismiss();
-     }
+
+  void _disposeAllWindow() {
+    if (_anchorBottomWindow != null) {
+      _anchorBottomWindow.dispose();
+      _anchorBottomWindow = null;
+    }
+    if (_toastWindow != null) {
+      _toastWindow.dismiss();
+    }
+    if (_loadingWindow != null) {
+      _loadingWindow.dismiss();
+    }
   }
 
   Widget _buildToastWidget(BuildContext context) {
@@ -269,23 +270,20 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin  {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 40.0),
           child: _buildToastImpl(context),
-        )
-    );
+        ));
   }
 }
 
 Widget _buildLoadingWidget(BuildContext context) {
-   return Center(
-     child: Column(
-       children: <Widget>[
-         CircularProgressIndicator()
-       ],
-     ),
-   );
+  return Center(
+    child: Column(
+      children: <Widget>[CircularProgressIndicator()],
+    ),
+  );
 }
 
-Widget _buildToastImpl(BuildContext context,{text}) {
-  text ??="test show toast by BaseWindow";
+Widget _buildToastImpl(BuildContext context, {text}) {
+  text ??= "test show toast by BaseWindow";
   return Center(
     child: Card(
       color: Colors.black,
@@ -302,11 +300,13 @@ Widget _buildToastImpl(BuildContext context,{text}) {
     ),
   );
 }
-enum Position{
+
+enum Position {
   top,
   center,
   bottom,
 }
+
 double _buildToastPosition(BuildContext context, Position _position) {
   var backResult;
   if (_position == Position.top) {
