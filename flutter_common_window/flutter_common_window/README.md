@@ -2,7 +2,8 @@
 
 a common overlap window for flutter. support animation, anchor left/right/top/bottom.
 
-## Getting Started
+## demo
+ ![demo1](https://github.com/LightSun/flutter-commons/blob/master/assets/flutter_common_window.gif)
 ## simple progress-dialog
 * 1, create window.
 ```dart
