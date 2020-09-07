@@ -87,7 +87,7 @@ class PullToRefreshApp extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, Widget refreshIndicator) {
+  Widget _buildContent(BuildContext context, Widget refreshIndicator, bool iosStyle) {
     return Scaffold(
       body: Container(padding: EdgeInsets.all(2.0), child: refreshIndicator),
     );
