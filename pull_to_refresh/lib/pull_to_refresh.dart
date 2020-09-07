@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'CupertinoSliverRefresh2.dart';
+import 'cupertino_sliver_refresh2.dart';
 import 'list_loader.dart';
 
 typedef UiCallbackBuilder = UiCallback Function(PullToRefreshState s);
