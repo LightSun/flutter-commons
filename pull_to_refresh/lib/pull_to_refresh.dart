@@ -34,6 +34,10 @@ class PullToRefreshWidget extends StatefulWidget {
   /// * indicatorBg: the indicator background color of refresh
   /// * indicatorValue: the indicator value color of refresh
   /// * showLoadMore: the function to show load more
+  /// * pullUpExtent: the pull-up extent as the delta away from maxScrollExtent
+  /// * iosBuilder: ios refresh control indicator builder  for ios-style
+  /// * refreshTriggerPullDistance: refresh trigger pull-distance for ios-style
+  /// * refreshIndicatorExtent: refresh indicator extent for ios-style
   const PullToRefreshWidget(
     this.listHelper,
     this.errorBuilder,
