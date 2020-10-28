@@ -14,10 +14,10 @@ enum WorkMode {
   /// when show is called, but window is pending. this request will be dropped.
   DROP,
 
-  /// hen show is called, but window is pending. this request will cause dismiss and then continue show.
+  /// when show is called, but window is pending. this request will cause dismiss and then continue show.
   DISMISS_BEFORE,
 
-  /// hen show is called, but window is pending. this request will cause [DismissDelegate] call and then continue show.
+  /// when show is called, but window is pending. this request will cause [DismissDelegate] call and then continue show.
   DISMISS_DELEGATE_BEFORE
 }
 
@@ -44,6 +44,7 @@ class BaseWindow {
   /// create base window by context , widget and callback.
   /// * context: the build context
   /// * child: the widget to display
+  /// * maskColor: the mask color of widget
   /// * top: margin top for this window to show. if < 0 means, use child to show directly, or else use Positioned.
   /// * showCallback: callback on shown or not.return a [Future].
   /// * dismissDelegate: called when you want to dismiss window.
@@ -52,21 +53,42 @@ class BaseWindow {
   factory BaseWindow.of(BuildContext context, Widget child,
       {WorkMode mode = WorkMode.DISMISS_BEFORE,
       double top = 0.0,
-      showCallback,
-      dismissDelegate}) {
+      Color maskColor,
+      ShowCallback showCallback,
+      DismissDelegate dismissDelegate}) {
     //AnimatedOpacity
     OverlayEntry entry = OverlayEntry(
-        builder: (BuildContext context) => top >= 0
-            ? Positioned(
-                //top effect the position of widget
-                top: top,
-                child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width,
-                    child: child),
-              )
-            : child);
+        builder: (BuildContext context) => _wrapChild(
+            top >= 0
+                ? Positioned(
+                    //top effect the position of widget
+                    top: top,
+                    child: Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width,
+                        child: child),
+                  )
+                : child,
+            maskColor));
     return BaseWindow._(context, entry, showCallback, dismissDelegate, mode);
+  }
+
+  static Widget _wrapChild(Widget child, Color mask) {
+    if (mask == null) {
+      return child;
+    }
+    return Stack(
+      children: <Widget>[
+        GestureDetector(
+            child: Container(
+              color: mask,
+            ),
+            onTap: () {
+              print("_wrapChild: clicked");
+            }),
+        child
+      ],
+    );
   }
 
   ///
@@ -247,6 +269,7 @@ class Window {
   /// * showPos: The relative position of the child relative to anchor
   /// * offsetX: the x offset. which used for 'showPos = LEFT' or 'showPos = RIGHT'
   /// * offsetY: the y offset. which used for 'showPos = TOP' or 'showPos = BOTTOM'
+  /// * maskColor: the mask color of widget
   /// * mode: work mode for if window already display
   /// * showCallback: show callback . can used for appear animation
   /// * dismissDelegate: dismiss delegate. can used for disappear animation
@@ -254,10 +277,11 @@ class Window {
       {RelativePosition showPos = RelativePosition.BOTTOM,
       double offsetX = 0.0, //offset distance. only effect- LEFT-RIGHT
       double offsetY = 0.0, //offset distance.
+      Color maskColor, // the mask color of background
 
       WorkMode mode = WorkMode.DISMISS_BEFORE,
-      showCallback,
-      dismissDelegate}) {
+      ShowCallback showCallback,
+      DismissDelegate dismissDelegate}) {
     RenderBox renderBox = anchor.currentContext.findRenderObject();
     //print("paintBounds: ${renderBox.paintBounds}"); // margin also contains
     Offset topOffset = renderBox.localToGlobal(Offset.zero);
@@ -389,6 +413,7 @@ class Window {
     }
     return Window((context) => BaseWindow.of(context, realChild,
         top: -1.0,
+        maskColor: maskColor,
         mode: mode,
         showCallback: showCallback,
         dismissDelegate: dismissDelegate));

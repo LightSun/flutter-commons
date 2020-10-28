@@ -121,6 +121,7 @@ class _HomeState extends State<HomeDemo> with TickerProviderStateMixin {
                       if (_anchorBottomWindow == null) {
                         _anchorBottomWindow = Window.ofAnchor(context,
                             _anchorKey8, _buildToastImpl(context, text: "Text"),
+                            maskColor: Color(0x66888888),
                             showPos: RelativePosition.RIGHT);
                       }
                       _anchorBottomWindow.toggleShow(context);

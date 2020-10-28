@@ -133,6 +133,12 @@ void _showBottomWindow(){
 ```
 *3, dismiss and dispose same as above.
 
+## mask color
+just add parameter
+```dart
+  maskColor: Color(<you want color>)
+```
+
 ### The more to see . in 'example/main.dart'
 ## Anchor
 * Heaven7

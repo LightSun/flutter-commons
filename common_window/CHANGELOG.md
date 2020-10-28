@@ -2,3 +2,5 @@
 init, common-window which support animation , anchor left/right/top/bottom, duration and etc.
 ### 1.0.1
  opt package for sample
+### 1.0.2
+ add mask color for window
