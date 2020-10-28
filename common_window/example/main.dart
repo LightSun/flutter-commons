@@ -1,4 +1,4 @@
-import 'package:common_window/pkg/libs.dart';
+import '../lib/pkg/libs.dart';
 import 'package:flutter/material.dart';
 
 void main() {

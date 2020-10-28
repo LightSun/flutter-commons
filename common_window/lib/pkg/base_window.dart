@@ -3,6 +3,9 @@ import 'package:flutter/widgets.dart';
 typedef ShowCallback = Future Function(bool);
 typedef DismissDelegate = Future Function();
 
+typedef WindowOwner = BaseWindow Function();
+typedef OnClickMaskListener = bool Function(BaseWindow window);
+
 class _PendingAction {
   int showTimeMsec = -1;
   OverlayEntry below;
@@ -45,6 +48,7 @@ class BaseWindow {
   /// * context: the build context
   /// * child: the widget to display
   /// * maskColor: the mask color of widget
+  /// * l: on click mask listener
   /// * top: margin top for this window to show. if < 0 means, use child to show directly, or else use Positioned.
   /// * showCallback: callback on shown or not.return a [Future].
   /// * dismissDelegate: called when you want to dismiss window.
@@ -54,11 +58,15 @@ class BaseWindow {
       {WorkMode mode = WorkMode.DISMISS_BEFORE,
       double top = 0.0,
       Color maskColor,
+      OnClickMaskListener l,
       ShowCallback showCallback,
       DismissDelegate dismissDelegate}) {
+    BaseWindow window;
     //AnimatedOpacity
     OverlayEntry entry = OverlayEntry(
-        builder: (BuildContext context) => _wrapChild(
+        builder: (BuildContext context) => _wrapChild((){
+          return window;
+        },
             top >= 0
                 ? Positioned(
                     //top effect the position of widget
@@ -69,11 +77,11 @@ class BaseWindow {
                         child: child),
                   )
                 : child,
-            maskColor));
-    return BaseWindow._(context, entry, showCallback, dismissDelegate, mode);
+            maskColor, l));
+    return window = BaseWindow._(context, entry, showCallback, dismissDelegate, mode);
   }
 
-  static Widget _wrapChild(Widget child, Color mask) {
+  static Widget _wrapChild(WindowOwner owner, Widget child, Color mask, OnClickMaskListener l) {
     if (mask == null) {
       return child;
     }
@@ -84,7 +92,12 @@ class BaseWindow {
               color: mask,
             ),
             onTap: () {
-              print("_wrapChild: clicked");
+              BaseWindow win = owner.call();
+              //if not handled. dismiss
+              if(l == null || !l.call(win)){
+                win.dismiss();
+              }
+              //print("_wrapChild: clicked");
             }),
         child
       ],
@@ -270,6 +283,7 @@ class Window {
   /// * offsetX: the x offset. which used for 'showPos = LEFT' or 'showPos = RIGHT'
   /// * offsetY: the y offset. which used for 'showPos = TOP' or 'showPos = BOTTOM'
   /// * maskColor: the mask color of widget
+  /// * l: on click mask listener
   /// * mode: work mode for if window already display
   /// * showCallback: show callback . can used for appear animation
   /// * dismissDelegate: dismiss delegate. can used for disappear animation
@@ -278,6 +292,7 @@ class Window {
       double offsetX = 0.0, //offset distance. only effect- LEFT-RIGHT
       double offsetY = 0.0, //offset distance.
       Color maskColor, // the mask color of background
+      OnClickMaskListener l, //the mask listener
 
       WorkMode mode = WorkMode.DISMISS_BEFORE,
       ShowCallback showCallback,
@@ -414,6 +429,7 @@ class Window {
     return Window((context) => BaseWindow.of(context, realChild,
         top: -1.0,
         maskColor: maskColor,
+        l: l,
         mode: mode,
         showCallback: showCallback,
         dismissDelegate: dismissDelegate));
